@@ -1,0 +1,9 @@
+H:\School\CS 789 - Embedded Systems\project\CNNF\CNNF_Accuracy\bin\Debug\CNNF_Accuracy.exe.config
+H:\School\CS 789 - Embedded Systems\project\CNNF\CNNF_Accuracy\bin\Debug\CNNF_Accuracy.exe
+H:\School\CS 789 - Embedded Systems\project\CNNF\CNNF_Accuracy\bin\Debug\CNNF_Accuracy.pdb
+H:\School\CS 789 - Embedded Systems\project\CNNF\CNNF_Accuracy\obj\Debug\CNNF_Accuracy.csprojAssemblyReference.cache
+H:\School\CS 789 - Embedded Systems\project\CNNF\CNNF_Accuracy\obj\Debug\CNNF_Accuracy.Properties.Resources.resources
+H:\School\CS 789 - Embedded Systems\project\CNNF\CNNF_Accuracy\obj\Debug\CNNF_Accuracy.csproj.GenerateResource.cache
+H:\School\CS 789 - Embedded Systems\project\CNNF\CNNF_Accuracy\obj\Debug\CNNF_Accuracy.csproj.CoreCompileInputs.cache
+H:\School\CS 789 - Embedded Systems\project\CNNF\CNNF_Accuracy\obj\Debug\CNNF_Accuracy.exe
+H:\School\CS 789 - Embedded Systems\project\CNNF\CNNF_Accuracy\obj\Debug\CNNF_Accuracy.pdb
