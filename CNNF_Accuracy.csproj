@@ -55,7 +55,8 @@
     </Compile>
     <Compile Include="Neural Net\CNN\CNN.cs" />
     <Compile Include="Neural Net\CNN\ConvolutionalLayer.cs" />
-    <Compile Include="Neural Net\CNN\WeightMatrix.cs" />
+    <Compile Include="Neural Net\CNN\FeatureMap.cs" />
+    <Compile Include="Neural Net\WeightMatrix.cs" />
     <Compile Include="Neural Net\Feedback\FeedbackLayer.cs" />
     <Compile Include="Neural Net\Layer.cs" />
     <Compile Include="Neural Net\LayerObject.cs" />

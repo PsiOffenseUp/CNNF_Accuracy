@@ -157,18 +157,12 @@ namespace CNNF.Neural_Net
 
 			for (i = 0; i < matrix.height; i++)
 			{
+				//TODO Double check that this is correct
 				for (j = 0; j < matrix.width; j++)
-				{
-					dendriteValues[i] += matrix.weights[i, j] * pool[i, j];
-				}
-					
+					dendriteValues[i] += matrix.weights[i, j] * pool[i, j];			
 
 				dendriteValues[i] += matrix.biases[i]; //Make sure to add the bias for this node
 			}
-
-			Layer returnLayer = new Layer(values);
-
-			return returnLayer; //Create a layer out of all of the values that we calculated and apply the activation function
 		}
 		#endregion
 
@@ -193,7 +187,7 @@ namespace CNNF.Neural_Net
 
 		#endregion
 
-		#region Constructors ------------
+		#region ------------ Constructors ------------
 		public Layer(int size, ActivationFunctions.FunctionType activation_function_type)
 		{
 			this.size = size;
