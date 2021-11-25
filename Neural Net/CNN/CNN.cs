@@ -4,45 +4,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.IO;
+using CNNF.Neural_Net.Feedback;
+
 namespace CNNF.Neural_Net.CNN
 {
 	public class CNNOutput
 	{
 		public DataPoint2D input;
 		double[] output;
-
-		//Constructors
-		public CNNOutput(int map_count)
-		{
-			maps = new FeatureMap[map_count];
-			pools = new MaxPool[map_count];
-		}
 	}
 
 	/// <summary> Single layer artificial neural network </summary>
 	public class CNN
 	{
 		public const double learningRate = 0.0015f;
-
-		WeightMatrix[] featureWeights; //Weights between input and feature maps
-		WeightMatrix[] poolWeights; //Weights between maxpools and 
-		WeightMatrix secondWeights; //Weights between each set of layers
 		public int hiddenNodes { get; private set; } //Number of neurodes that should be on the hidden layer
-		public int mapCount { get; private set; } //Number of feature maps
-		int inputWidth, outputWidth;
-		public const int subimageSize = 5; //Dimension of subimage vector from MNIST vector
-		public const int featureDimension = 28 - subimageSize + 1; //Dimension of each feature map
-		public const int poolDimension = featureDimension / 2;
+		public int convolutionalLayerDepth { get; private set; } //Number of conv layers per time step. For normal CNN, just one time step
+		public int convolutionalLayerWidth { get; private set; } //Number of sub conv layers per conv layer
+		protected int inputWidth, outputWidth;
+		public const int subimageSize = 3; //Dimension of subimage to feature maps
 
-		//Storage for deltas during backpropagation. Allocate them once in the constructor to avoid multiple allocations
-		double[] output_deltas; //Deltas for the output
-		double[] hidden_deltas; //Deltas for the hidden layer
-		double[,] feature_deltas; //Deltas for each of the feature map elements
+		//Layers of the CNN
+		ConvolutionalLayer[,] convolutionalLayers;
+		Layer feedForwardLayer;
 
 		public LossFunction lossFunction;
 		public LossFunction lossDerivative;
 
-		//Methods
+		#region ***************** Propogation Methods *****************
 
 		/// <summary> Feeds the input vector through the neural net and returns an array of size 3
 		/// of all of the Layers that were used </summary>
@@ -169,13 +159,37 @@ namespace CNNF.Neural_Net.CNN
 			return errors;
 		}
 
+		#endregion
+
+		#region ***************** String Methods *****************
 		/// <summary> ToString override for printing </summary>
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return $"Output weights: 1:\n{secondWeights.ToString()}";
+			return "";
 		}
 
+		public string GetWeightsString()
+		{
+			/*int i, j, k;
+			string result = "";
+
+			//Get the weights between the input and the feature maps
+			for (i = 0; i < mapCount; i++)
+				result += featureWeights[i].GetWeightString();
+
+			//Get the weights between the max pools and hidden layer
+			for (i = 0; i < mapCount; i++)
+				result += poolWeights[i].GetWeightString();
+
+			result += secondWeights.GetWeightString();
+
+			return result;*/
+			return "";
+		}
+		#endregion
+
+		#region ***************** SoftMax Methods *****************
 		/// <summary> Applies softmax to the vector and returns all of the softmaxes as a vector
 		/// </summary>
 		/// <param name="vector"></param>
@@ -248,80 +262,33 @@ namespace CNNF.Neural_Net.CNN
 
 			return values;
 		}
+		#endregion
 
-		public string GetWeightsString()
+		#region ***************** Constructors *****************
+		public CNN(int hidden_nodes, int input_width, int output_width, int feature_maps, int number_of_conv_layers)
 		{
-			int i, j, k;
-			string result = "";
-
-			//Get the weights between the input and the feature maps
-			for (i = 0; i < mapCount; i++)
-				result += featureWeights[i].GetWeightString();
-
-			//Get the weights between the max pools and hidden layer
-			for (i = 0; i < mapCount; i++)
-				result += poolWeights[i].GetWeightString();
-
-			result += secondWeights.GetWeightString();
-
-			return result;
-		}
-
-		//Constructors
-		public CNN(int hidden_nodes, int input_width, int output_width, int feature_maps)
-		{
+			//Set all of the variables passed
+			this.hiddenNodes = hidden_nodes;
 			this.inputWidth = input_width;
 			this.outputWidth = output_width;
-			hiddenNodes = hidden_nodes;
-			mapCount = feature_maps;
+			this.convolutionalLayerWidth = feature_maps;
+			this.convolutionalLayerDepth = number_of_conv_layers;
 
-			int featureDimension = 28 - subimageSize + 1; //Dimension of the feature map
+			//Allocate convolutional layers
 
-			//Initialize weights for ANN portion of the CNN
-			secondWeights = new WeightMatrix(hidden_nodes, output_width);
-			featureWeights = new WeightMatrix[feature_maps]; //Create 6 spots of matrices for the input to feature and max pool to 
-			poolWeights = new WeightMatrix[feature_maps];
-
-			for (int i = 0; i < mapCount; i++)
-			{
-				featureWeights[i] = new WeightMatrix(25, featureDimension * featureDimension);
-				poolWeights[i] = new WeightMatrix((featureDimension * featureDimension) / 4, hiddenNodes);
-			}
-
-			//Allocate space to store deltas
-			output_deltas = new double[outputWidth]; //Deltas for the output
-			hidden_deltas = new double[hiddenNodes]; //Deltas for the hidden layer
-			feature_deltas = new double[mapCount, poolDimension * poolDimension]; //Deltas for each of the feature map elements
+			//Allocate last fully connected layer
 		}
 
 		public CNN(int hidden_nodes, int maps, StreamReader reader)
 		{
-			//Read all of the weight matrices
-			this.inputWidth = 784;
-			this.outputWidth = 10;
-			this.hiddenNodes = hidden_nodes;
-			this.mapCount = maps;
-
-			//Allocate the WeightMatrix arrays
-			featureWeights = new WeightMatrix[maps]; //Create 6 spots of matrices for the input to feature and max pool to 
-			poolWeights = new WeightMatrix[maps];
-
-			//Now go through and read all of the matrices
-			int i;
-
-			for (i = 0; i < mapCount; i++)
-				featureWeights[i] = new WeightMatrix(reader);
-
-			//Get the weights between the max pools and hidden layer
-			for (i = 0; i < mapCount; i++)
-				poolWeights[i] = new WeightMatrix(reader);
-
-			secondWeights = new WeightMatrix(reader);
-
-			//Allocate space to store deltas
-			output_deltas = new double[outputWidth]; //Deltas for the output
-			hidden_deltas = new double[hiddenNodes]; //Deltas for the hidden layer
-			feature_deltas = new double[mapCount, poolDimension * poolDimension]; //Deltas for each of the feature map elements
+			//TODO
 		}
+		#endregion
+	}
+
+	public class CNNF : CNN
+	{
+		public int timeSteps { get; private set; } //Number of total time steps
+		FeedbackLayer[] feedbackLayers;
 	}
 }

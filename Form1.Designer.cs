@@ -33,10 +33,8 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.panel5 = new System.Windows.Forms.Panel();
-			this.consoleTextTemplate = new System.Windows.Forms.Label();
 			this.consolePanel = new System.Windows.Forms.FlowLayoutPanel();
 			this.panel2.SuspendLayout();
-			this.consolePanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel1
@@ -81,21 +79,10 @@
 			this.panel5.Size = new System.Drawing.Size(562, 369);
 			this.panel5.TabIndex = 4;
 			// 
-			// consoleTextTemplate
-			// 
-			this.consoleTextTemplate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.consoleTextTemplate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(30)))), ((int)(((byte)(40)))));
-			this.consoleTextTemplate.Location = new System.Drawing.Point(3, 0);
-			this.consoleTextTemplate.Name = "consoleTextTemplate";
-			this.consoleTextTemplate.Size = new System.Drawing.Size(100, 23);
-			this.consoleTextTemplate.TabIndex = 0;
-			this.consoleTextTemplate.Text = "label2";
-			// 
 			// consolePanel
 			// 
 			this.consolePanel.AutoScroll = true;
 			this.consolePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(3)))), ((int)(((byte)(12)))));
-			this.consolePanel.Controls.Add(this.consoleTextTemplate);
 			this.consolePanel.Location = new System.Drawing.Point(482, 449);
 			this.consolePanel.Name = "consolePanel";
 			this.consolePanel.Size = new System.Drawing.Size(562, 169);
@@ -115,7 +102,6 @@
 			this.Text = "CNNF Accuracy";
 			this.panel2.ResumeLayout(false);
 			this.panel2.PerformLayout();
-			this.consolePanel.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -126,7 +112,6 @@
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Panel panel3;
-		private System.Windows.Forms.Label consoleTextTemplate;
 		private System.Windows.Forms.Panel panel5;
 		private System.Windows.Forms.FlowLayoutPanel consolePanel;
 	}
